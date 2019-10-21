@@ -1,7 +1,9 @@
 var sounds = [];
 var i = [];
-var x = [];
-var y = [];
+var n = [];
+var cursorX = [];
+var cursorY = [];
+var keys = [];
 
 //define and load sound file;
 function preload() {
@@ -9,7 +11,7 @@ function preload() {
   for (var i = -28; i < 36; i++) {
     let sound = loadSound("glockenspiel.m4a");
     sound.rate(0.5 * pow(2, i / 12)); // 12-semitone exponential scale
-
+    
     sounds.push(sound);
   }
 }
@@ -21,47 +23,63 @@ function setup() {
 function draw() {
   background(300, 240, 240);
   
-  
   //draw empty sheet lines
-  for (i = 10; i <= 50; i += 10){
+  for (n = 10; n <= 50; n += 10){
     for (var j = 50 ; j <= 770; j += 90){
-  line(30, i + j, 570, i + j);
-  stroke(200, 210, 200);
+  line(30, n + j, 570, n + j);
+  stroke(240, 210, 200);
   }
  }
   
-  
-  //produce sound range;
-  for (i = 0; i < sounds.length; i++) {
-    let sound = sounds[i];
-    if (sound.isPlaying()) {
-      //draw shape of the notes;h
-      fill(180, 60, 80);
-      noStroke();
-      ellipse(width / sounds.length * (i + 3.5), height / 3, 11, 11);
-      //ellipse(width / sounds.length * (i + 3.5), height / 3, 18, 10);
-    }
-    // else{
-    //   fill(180, 180, 300);
-    //   noStroke();
-    //   ellipse(width / sounds.length * (i + 3.5), height / 3, 11, 11);
-    // }
-    
+  cursorX = 50;
+  cursorY = 45;
+  for (k = 0; k < keys.length; k++){
+    if (cursorX >= 570){
+      cursorY += 90;
+      cursorX = 50;
   }
+    switch(keys[i]){
+      case "a":
+        i = 5;
+        
+      case "b":
+        i = 10;
+    }
+    
+    fill(180, 60, 80);
+    noStroke();
+    //notes' positions;
+    ellipse(cursorX, cursorY + i, 13, 10);
+    cursorX += 20;
+    cursorY = cursorY + i;
+  }
+    
+  
+  //draw ellipses;
+  // for (i = 0; i < sounds.length; i++) {
+  //   let sound = sounds[i];
+  //   if (sound.isPlaying()) {
+  //     //draw shape of the notes;
+  //     fill(180, 60, 80);
+  //     noStroke();
+  //     //notes' positions;
+  //     ellipse(cursorX, cursorY, 16, 10);
+  //   }
+  // }
+  
 }
-
 
 //set up key board;
 function keyPressed() {
+  //a = c note;
   if (key == "a") {
     sounds[0].play();
-    
+    keys.push(key);
   }
   if (key == "z") {
     sounds[1].play();
   }
-  
-  //s = g note;
+
   if (key == "s") {
     sounds[2].play();
   }
@@ -88,6 +106,7 @@ function keyPressed() {
   }
   if (key == "b") {
     sounds[10].play();
+    keys.push(key);
   }
   if (key == "j") {
     sounds[11].play();
@@ -164,5 +183,4 @@ function keyPressed() {
   if (key == "0") {
     sounds[35].play();
   }
-  
 }
